@@ -4,7 +4,21 @@ import TUIO.*;
 TuioProcessing tuioClient;
 
 // these are some helper variables which are used
-// to create scalable graphical feedback
+// to create scalable graphical feedback 
+//fill(255);
+  //   if(tobj.getSymbolID() == 1){
+    // stroke(0,255,51);
+    // fill(0,255,51);
+     //text("1", tobj.getScreenX(width), tobj.getScreenY(height));
+     //image(jupiter,tobj.getScreenX(width), tobj.getScreenY(height));
+     
+//     }
+     //else if(tobj.getSymbolID() == 2){
+     //stroke(64,0,0);
+     //fill(64,0,0);
+     //text("2", tobj.getScreenX(width), tobj.getScreenY(height));
+     //image(saturn,tobj.getScreenX(width), tobj.getScreenY(height));
+     //}
 float cursor_size = 15;
 float object_size = 60;
 float table_size = 760;
@@ -20,7 +34,9 @@ PImage mercury;
 PImage venus;
 PImage mars;
 int y;
-
+//
+PImage img[];
+int nPics = 8;
 boolean verbose = false; // print console debug messages
 boolean callback = true; // updates only after callbacks
 
@@ -36,7 +52,7 @@ void setup()
   // periodic updates
   if (!callback) {
     loop();
-    frameRate(60); //<>//
+    frameRate(60);
   } else noLoop(); // or callback updates 
   
   font = createFont("Arial", 12);
@@ -54,6 +70,11 @@ void draw()
 {
   
   background(bg);
+  
+  img = new PImage[nPics];
+  img[0] = loadImage("Pjup.png");
+  img[1] = loadImage("sat.png");
+  
   jupiter = loadImage("Pjup.png");
   saturn = loadImage("sat.png");
   neptune = loadImage("nep.png");
@@ -77,34 +98,28 @@ void draw()
      rotate(tobj.getAngle());
      rect(-obj_size/2,-obj_size/2,obj_size,obj_size);
      popMatrix();
-     fill(255);
-     if(tobj.getSymbolID() == 0){
-     stroke(0,255,51);
-     fill(0,255,51);
-     text("1", tobj.getScreenX(width), tobj.getScreenY(height));
-     image(jupiter,tobj.getScreenX(width), tobj.getScreenY(height));
-     
-     }
-     else if(tobj.getSymbolID() == 2){
-     stroke(0,255,51);
-     fill(0,255,51);
-     text("2", tobj.getScreenX(width), tobj.getScreenY(height));
-     image(saturn,tobj.getScreenX(width), tobj.getScreenY(height));
+     if (tobj.getSymbolID()>=0 && tobj.getSymbolID()<2){
+     stroke(64,0,0);
+     fill(64,0,0);
+   //  text("3", tobj.getScreenX(width), tobj.getScreenY(height));
+     image(img[tobj.getSymbolID()],tobj.getScreenX(width), tobj.getScreenY(height));
+    
      }
      
-     else if(tobj.getSymbolID() == 3){
-     stroke(0,255,51);
-     fill(0,255,51);
+    else if(tobj.getSymbolID() == 3){
+     stroke(64,0,0);
+     fill(64,0,0);
      text("3", tobj.getScreenX(width), tobj.getScreenY(height));
      image(neptune,tobj.getScreenX(width), tobj.getScreenY(height));
      }
      else if(tobj.getSymbolID() == 4){
-     stroke(0,255,51);
-     fill(0,255,51);
+     stroke(64,0,0);
+     fill(64,0,0);
      text("4", tobj.getScreenX(width), tobj.getScreenY(height));
      image(uranus,tobj.getScreenX(width), tobj.getScreenY(height));
      }
      else if(tobj.getSymbolID() == 5){
+       
      stroke(64,0,0);
      fill(64,0,0);
      text("5", tobj.getScreenX(width), tobj.getScreenY(height));
@@ -127,36 +142,6 @@ void draw()
      fill(64,0,0);
      text("8", tobj.getScreenX(width), tobj.getScreenY(height));
      image(mars,tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 9){
-     text("9", tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 10){
-     text("+", tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 11){
-     text("-", tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 12){
-     text("/", tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 13){
-     text("*", tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 14){
-     text(">", tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 15){
-     text("<", tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 16){
-     text("=", tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 17){
-     text("SHOUT()", tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 18){
-     text("IF", tobj.getScreenX(width), tobj.getScreenY(height));
      }
  
  }
