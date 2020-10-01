@@ -3,28 +3,13 @@ import TUIO.*;
 // declare a TuioProcessing client
 TuioProcessing tuioClient;
 
-// these are some helper variables which are used
-// to create scalable graphical feedback 
-//fill(255);
-  //   if(tobj.getSymbolID() == 1){
-    // stroke(0,255,51);
-    // fill(0,255,51);
-     //text("1", tobj.getScreenX(width), tobj.getScreenY(height));
-     //image(jupiter,tobj.getScreenX(width), tobj.getScreenY(height));
-     
-//     }
-     //else if(tobj.getSymbolID() == 2){
-     //stroke(64,0,0);
-     //fill(64,0,0);
-     //text("2", tobj.getScreenX(width), tobj.getScreenY(height));
-     //image(saturn,tobj.getScreenX(width), tobj.getScreenY(height));
-     //}
 float cursor_size = 15;
 float object_size = 60;
 float table_size = 760;
 float scale_factor = 1;
 PFont font;
 PImage bg;
+PImage bg2;
 PImage jupiter;
 PImage saturn;
 PImage neptune;
@@ -33,10 +18,25 @@ PImage earth;
 PImage mercury;
 PImage venus;
 PImage mars;
-int y;
-//
+
+
+PImage smile;
+PImage sad;
+
+String reply;
+
+int main_state = 0;
+int sub_state = 0;
+
+
 PImage img[];
-int nPics = 8;
+PImage right[];
+
+//int right[];
+
+
+
+int nPics = 9;
 boolean verbose = false; // print console debug messages
 boolean callback = true; // updates only after callbacks
 
@@ -46,7 +46,12 @@ void setup()
   noCursor();
   size(2048,1536);
   noStroke();
+  //load req images
   bg = loadImage("back.jpg");
+  bg2 = loadImage("bg.jpg");
+  smile = loadImage ("smile.png");
+  sad = loadImage ("sad.png");
+  
   fill(0);
   
   // periodic updates
@@ -55,8 +60,13 @@ void setup()
     frameRate(60);
   } else noLoop(); // or callback updates 
   
-  font = createFont("Arial", 12);
+  font = createFont("Arial", 40);
   scale_factor = height/table_size;
+  
+  textAlign(CENTER);
+  textSize(160);
+  fill(255);
+
   
   // finally we create an instance of the TuioProcessing client
   // since we add "this" class as an argument the TuioProcessing class expects
@@ -71,20 +81,32 @@ void draw()
   
   background(bg);
   
-  img = new PImage[nPics];
-  img[0] = loadImage("Pjup.png");
-  img[1] = loadImage("sat.png");
   
-  jupiter = loadImage("Pjup.png");
-  saturn = loadImage("sat.png");
-  neptune = loadImage("nep.png");
-  uranus = loadImage("Pur.png");
-  earth = loadImage("Pter.png");
-  mercury = loadImage("Pmerc.png");
-  venus = loadImage("Pven.png");
-  mars = loadImage("Pmar.png");
+  img = new PImage[nPics];
+  img[1] = loadImage("Pjup.png");
+  img[2] = loadImage("sat.png");
+  img[3] = loadImage("nep.png");
+  /*img[4] = loadImage("Pur.png");
+  img[5] = loadImage("Pter.png");
+  img[6] = loadImage("Pmerc.png");
+  img[7] = loadImage("Pven.png");
+  img[8] = loadImage("Pmar.png");*/
+  
+  right= new PImage[nPics];
+
+  right[1] = loadImage("Pjup.png");
+  right[2] = loadImage("sat.png");
+  right[3] = loadImage("Pur.png");
+  /*right[4] = loadImage("nep.png");
+  right[5] = loadImage("Pter.png");
+  right[6] = loadImage("Pven.png");
+  right[7] = loadImage("Pmar.png");
+  right[8] = loadImage("Pmerc.png");*/
+ 
+
+
   textFont(font,12*scale_factor);
-  float obj_size = object_size*scale_factor; 
+  //float obj_size = object_size*scale_factor; 
   float cur_size = cursor_size*scale_factor; 
    
   ArrayList<TuioObject> tuioObjectList = tuioClient.getTuioObjectList();
@@ -93,58 +115,67 @@ void draw()
      //stroke(64,0,0);
      //fill(64,0,0);
      pushMatrix();
-     textSize(26); 
+    // textSize(26); 
      translate(tobj.getScreenX(width),tobj.getScreenY(height));
      rotate(tobj.getAngle());
-     rect(-obj_size/2,-obj_size/2,obj_size,obj_size);
+     //rect(-obj_size/2,-obj_size/2,obj_size,obj_size);
      popMatrix();
-     if (tobj.getSymbolID()>=0 && tobj.getSymbolID()<2){
-     stroke(64,0,0);
-     fill(64,0,0);
-   //  text("3", tobj.getScreenX(width), tobj.getScreenY(height));
+     if (tobj.getSymbolID()>=0 && tobj.getSymbolID()<=3){
      image(img[tobj.getSymbolID()],tobj.getScreenX(width), tobj.getScreenY(height));
-    
      }
-     
-    else if(tobj.getSymbolID() == 3){
-     stroke(64,0,0);
-     fill(64,0,0);
-     text("3", tobj.getScreenX(width), tobj.getScreenY(height));
-     image(neptune,tobj.getScreenX(width), tobj.getScreenY(height));
+
+   for(int j=0; j<right.length; j++) {
+     for (int e=0; e<img.length; e++) {
+       if (right[j] == img[i]){
+      text("Good, great job", width/2, 600);
+      image(smile,0,0);
+       background(bg2);
+    }
+    else if (right[j] != img[i]){
+    text("try again", width/2, 600);
+      image(sad,0,0);
+    }
      }
-     else if(tobj.getSymbolID() == 4){
-     stroke(64,0,0);
-     fill(64,0,0);
-     text("4", tobj.getScreenX(width), tobj.getScreenY(height));
-     image(uranus,tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 5){
-       
-     stroke(64,0,0);
-     fill(64,0,0);
-     text("5", tobj.getScreenX(width), tobj.getScreenY(height));
-     image(earth,tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 6){
-     stroke(64,0,0);
-     fill(64,0,0);
-     text("6", tobj.getScreenX(width), tobj.getScreenY(height));
-     image(mercury,tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 7){
-     stroke(64,0,0);
-     fill(64,0,0);
-     text("7", tobj.getScreenX(width), tobj.getScreenY(height));
-     image(venus,tobj.getScreenX(width), tobj.getScreenY(height));
-     }
-     else if(tobj.getSymbolID() == 8){
-     stroke(64,0,0);
-     fill(64,0,0);
-     text("8", tobj.getScreenX(width), tobj.getScreenY(height));
-     image(mars,tobj.getScreenX(width), tobj.getScreenY(height));
-     }
- 
+   }
+  
  }
+ 
+ 
+ /*switch(main_state) {
+  case 0: // title screen
+    background(bg);
+    //Question1: Orginaze planets from the biggest to the samllest 
+    text("رتب الكواكب من الأكبر إلى الأصغر", 200, 200);
+     if (img==answ){
+      image(smile, 200, 200);
+      }
+      else {
+      image(sad, 200, 200);
+      }
+    break;
+  case 1: // The first level.
+      background(bg);
+      //Question1: Orginaze planets from the biggest to the samllest 
+      text("رتب الكواكب من الأكبر إلى الأصغر", 200, 100);
+      if (img==answ){
+      image(smile, 200, 200);
+      }
+      else {
+      image(sad, 200, 200);
+      }
+    break;
+  case 2:
+    background(bg);
+    text("The end!", 200, 200);//here to put question2
+  }*/
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
    
    ArrayList<TuioCursor> tuioCursorList = tuioClient.getTuioCursorList();
    for (int i=0;i<tuioCursorList.size();i++) {
